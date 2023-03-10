@@ -16,13 +16,13 @@ func TestPackage(t *testing.T) {
 	code.Add(
 		Type(
 			"Face",
-			Interface(
-				MethodDecl("String", Signature(In(), Out())),
-				MethodDecl("Error", Signature(In(), Out())),
+			Iface(
+				MethodDecl("String", Sign(In(), Out())),
+				MethodDecl("Error", Sign(In(), Out())),
 			),
 		),
 	)
-	code.Add(Func("main", Signature(In(), Out()), Lines(
+	code.Add(Func("main", Sign(In(), Out()), Lines(
 		For(Raw("a > 10"), Raw("fmt.Println(\"hehe\")")),
 	)))
 	pkg.SetCode(code)

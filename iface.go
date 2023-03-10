@@ -1,36 +1,36 @@
 package renderer
 
-type InterfaceRenderer struct {
+type IfaceRenderer struct {
 	fields Code
 	ctx    Code
 }
 
-func Interface(methods ...Code) *InterfaceRenderer {
-	i := &InterfaceRenderer{}
+func Iface(methods ...Code) *IfaceRenderer {
+	i := &IfaceRenderer{}
 	i.SetFields(Methods(methods...))
 	return i
 }
 
-func (i *InterfaceRenderer) GetFields() Code {
+func (i *IfaceRenderer) GetFields() Code {
 	return i.fields
 }
 
-func (i *InterfaceRenderer) SetFields(fields Code) {
+func (i *IfaceRenderer) SetFields(fields Code) {
 	i.fields = fields
 	if fields != nil {
 		fields.setContext(i)
 	}
 }
 
-func (i *InterfaceRenderer) getContext() Code {
+func (i *IfaceRenderer) getContext() Code {
 	return i.ctx
 }
 
-func (i *InterfaceRenderer) setContext(ctx Code) {
+func (i *IfaceRenderer) setContext(ctx Code) {
 	i.ctx = ctx
 }
 
-func (i *InterfaceRenderer) render(w *Writer) {
+func (i *IfaceRenderer) render(w *Writer) {
 	w.Write("interface {")
 	w.Br()
 	w.AddIndent()
@@ -46,9 +46,9 @@ type MethodDeclsRenderer struct {
 }
 
 func Methods(methods ...Code) *MethodDeclsRenderer {
-	l := &MethodDeclsRenderer{}
-	l.Add(methods...)
-	return l
+	i := &MethodDeclsRenderer{}
+	i.Add(methods...)
+	return i
 }
 
 func (l *MethodDeclsRenderer) Len() int {

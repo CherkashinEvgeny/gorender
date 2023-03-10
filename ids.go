@@ -5,12 +5,10 @@ type IdsRenderer struct {
 	ctx   Code
 }
 
-func Ids(ids ...string) *IdsRenderer {
-	l := &IdsRenderer{}
-	for _, id := range ids {
-		l.Add(Id(id))
-	}
-	return l
+func Ids(ids ...Code) *IdsRenderer {
+	i := &IdsRenderer{}
+	i.Add(ids...)
+	return i
 }
 
 func (l *IdsRenderer) Len() int {

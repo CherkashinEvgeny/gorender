@@ -6,9 +6,9 @@ type BlocksRenderer struct {
 }
 
 func Blocks(items ...Code) *BlocksRenderer {
-	l := &BlocksRenderer{}
-	l.Add(items...)
-	return l
+	i := &BlocksRenderer{}
+	i.Add(items...)
+	return i
 }
 
 func (l *BlocksRenderer) Len() int {

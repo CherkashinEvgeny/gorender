@@ -42,41 +42,41 @@ func (s *StructRenderer) render(w *Writer) {
 	w.Write("}")
 }
 
-type FieldsRenderer struct {
+type FieldDefsRenderer struct {
 	items []Code
 	ctx   Code
 }
 
-func Fields(items ...Code) *FieldsRenderer {
-	l := &FieldsRenderer{}
-	l.Add(items...)
-	return l
+func FieldDefs(items ...Code) *FieldDefsRenderer {
+	i := &FieldDefsRenderer{}
+	i.Add(items...)
+	return i
 }
 
-func (l *FieldsRenderer) Len() int {
+func (l *FieldDefsRenderer) Len() int {
 	return len(l.items)
 }
 
-func (l *FieldsRenderer) At(i int) Code {
+func (l *FieldDefsRenderer) At(i int) Code {
 	return l.items[i]
 }
 
-func (l *FieldsRenderer) Add(items ...Code) {
+func (l *FieldDefsRenderer) Add(items ...Code) {
 	l.items = append(l.items, items...)
 	for _, item := range items {
 		item.setContext(l)
 	}
 }
 
-func (l *FieldsRenderer) getContext() Code {
+func (l *FieldDefsRenderer) getContext() Code {
 	return l.ctx
 }
 
-func (l *FieldsRenderer) setContext(ctx Code) {
+func (l *FieldDefsRenderer) setContext(ctx Code) {
 	l.ctx = ctx
 }
 
-func (l *FieldsRenderer) render(w *Writer) {
+func (l *FieldDefsRenderer) render(w *Writer) {
 	for i, im := range l.items {
 		if i != 0 {
 			w.Br()
@@ -85,47 +85,47 @@ func (l *FieldsRenderer) render(w *Writer) {
 	}
 }
 
-type FieldRenderer struct {
+type FieldDefRenderer struct {
 	name  string
 	ftype Code
 	ctx   Code
 }
 
-func Field(name string, ftype Code) *FieldRenderer {
-	f := &FieldRenderer{}
+func FieldDef(name string, ftype Code) *FieldDefRenderer {
+	f := &FieldDefRenderer{}
 	f.SetName(name)
 	f.SetType(ftype)
 	return f
 }
 
-func (f *FieldRenderer) GetName() string {
+func (f *FieldDefRenderer) GetName() string {
 	return f.name
 }
 
-func (f *FieldRenderer) SetName(name string) {
+func (f *FieldDefRenderer) SetName(name string) {
 	f.name = name
 }
 
-func (f *FieldRenderer) GetType() Code {
+func (f *FieldDefRenderer) GetType() Code {
 	return f.ftype
 }
 
-func (f *FieldRenderer) SetType(ftype Code) {
+func (f *FieldDefRenderer) SetType(ftype Code) {
 	f.ftype = ftype
 	if ftype != nil {
 		ftype.setContext(f)
 	}
 }
 
-func (f *FieldRenderer) getContext() Code {
+func (f *FieldDefRenderer) getContext() Code {
 	return f.ctx
 }
 
-func (f *FieldRenderer) setContext(ctx Code) {
+func (f *FieldDefRenderer) setContext(ctx Code) {
 	f.ctx = ctx
 }
 
-func (f *FieldRenderer) render(w *Writer) {
+func (f *FieldDefRenderer) render(w *Writer) {
 	w.Write(f.name)
 	w.Write(" ")
 	indent := f.indent()
@@ -135,15 +135,15 @@ func (f *FieldRenderer) render(w *Writer) {
 	f.ftype.render(w)
 }
 
-func (f *FieldRenderer) indent() int {
-	fields, ok := f.ctx.(*FieldsRenderer)
+func (f *FieldDefRenderer) indent() int {
+	fields, ok := f.ctx.(*FieldDefsRenderer)
 	if !ok {
 		return 0
 	}
 	selfIndex := 0
 	for selfIndex < fields.Len() {
 		field := fields.At(selfIndex)
-		self, ok := field.(*FieldRenderer)
+		self, ok := field.(*FieldDefRenderer)
 		if !ok {
 			continue
 		}
@@ -154,7 +154,7 @@ func (f *FieldRenderer) indent() int {
 	maxGap := 0
 	for i := selfIndex - 1; i >= 0; i-- {
 		field := fields.At(selfIndex)
-		previousField, ok := field.(*FieldRenderer)
+		previousField, ok := field.(*FieldDefRenderer)
 		if !ok {
 			break
 		}
@@ -165,7 +165,7 @@ func (f *FieldRenderer) indent() int {
 	}
 	for i := selfIndex + 1; i < fields.Len(); i++ {
 		field := fields.At(selfIndex)
-		nextField, ok := field.(*FieldRenderer)
+		nextField, ok := field.(*FieldDefRenderer)
 		if !ok {
 			break
 		}

@@ -6,9 +6,9 @@ type LinesRenderer struct {
 }
 
 func Lines(codes ...Code) *LinesRenderer {
-	s := &LinesRenderer{}
-	s.Add(codes...)
-	return s
+	i := &LinesRenderer{}
+	i.Add(codes...)
+	return i
 }
 
 func (s *LinesRenderer) Len() int {

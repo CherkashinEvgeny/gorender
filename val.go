@@ -4,22 +4,61 @@ import (
 	"strconv"
 )
 
-type LitRenderer struct {
+func Vals(items ...Code) *ValsRenderer {
+	i := &ValsRenderer{}
+	i.Add(items...)
+	return i
+}
+
+func (v *ValsRenderer) Len() int {
+	return len(v.items)
+}
+
+func (v *ValsRenderer) At(i int) Code {
+	return v.items[i]
+}
+
+func (v *ValsRenderer) Add(items ...Code) {
+	v.items = append(v.items, items...)
+	for _, item := range items {
+		item.setContext(v)
+	}
+}
+
+func (v *ValsRenderer) getContext() Code {
+	return v.ctx
+}
+
+func (v *ValsRenderer) setContext(ctx Code) {
+	v.ctx = ctx
+}
+
+func (v *ValsRenderer) render(w *Writer) {
+	for i, item := range v.items {
+		if i != 0 {
+			w.Br()
+		}
+		item.render(w)
+		w.Write(",")
+	}
+}
+
+type ValRenderer struct {
 	value any
 }
 
-func Lit(value any) LitRenderer {
-	return LitRenderer{value}
+func val(value any) ValRenderer {
+	return ValRenderer{value}
 }
 
-func (l LitRenderer) getContext() Code {
+func (l ValRenderer) getContext() Code {
 	return nil
 }
 
-func (l LitRenderer) setContext(ctx Code) {
+func (l ValRenderer) setContext(ctx Code) {
 }
 
-func (l LitRenderer) render(w *Writer) {
+func (l ValRenderer) render(w *Writer) {
 	switch v := l.value.(type) {
 	case bool:
 		renderBoolLiteral(v, w)

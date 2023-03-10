@@ -7,7 +7,7 @@ type FuncTypeRenderer struct {
 
 func FuncType(in Code, out Code) *FuncTypeRenderer {
 	f := &FuncTypeRenderer{}
-	f.SetSignature(Signature(in, out))
+	f.SetSignature(Sign(in, out))
 	return f
 }
 

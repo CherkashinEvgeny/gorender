@@ -1,49 +1,49 @@
 package renderer
 
-type SignatureRenderer struct {
+type SignRenderer struct {
 	in  Code
 	out Code
 	ctx Code
 }
 
-func Signature(in Code, out Code) *SignatureRenderer {
-	s := &SignatureRenderer{}
+func Sign(in Code, out Code) *SignRenderer {
+	s := &SignRenderer{}
 	s.SetIn(in)
 	s.SetOut(out)
 	return s
 }
 
-func (s *SignatureRenderer) GetIn() Code {
+func (s *SignRenderer) GetIn() Code {
 	return s.in
 }
 
-func (s *SignatureRenderer) SetIn(in Code) {
+func (s *SignRenderer) SetIn(in Code) {
 	s.in = in
 	if in != nil {
 		in.setContext(s)
 	}
 }
 
-func (s *SignatureRenderer) GetOut() Code {
+func (s *SignRenderer) GetOut() Code {
 	return s.out
 }
 
-func (s *SignatureRenderer) SetOut(out Code) {
+func (s *SignRenderer) SetOut(out Code) {
 	s.out = out
 	if out != nil {
 		out.setContext(s)
 	}
 }
 
-func (s *SignatureRenderer) getContext() Code {
+func (s *SignRenderer) getContext() Code {
 	return s.ctx
 }
 
-func (s *SignatureRenderer) setContext(ctx Code) {
+func (s *SignRenderer) setContext(ctx Code) {
 	s.ctx = ctx
 }
 
-func (s *SignatureRenderer) render(w *Writer) {
+func (s *SignRenderer) render(w *Writer) {
 	s.in.render(w)
 	if s.out == nil {
 		return
@@ -65,9 +65,9 @@ type InRenderer struct {
 }
 
 func In(items ...Code) *InRenderer {
-	l := &InRenderer{}
-	l.Add(items...)
-	return l
+	i := &InRenderer{}
+	i.Add(items...)
+	return i
 }
 
 func (l *InRenderer) Len() int {
@@ -110,9 +110,9 @@ type OutRenderer struct {
 }
 
 func Out(items ...Code) *OutRenderer {
-	l := &OutRenderer{}
-	l.Add(items...)
-	return l
+	i := &OutRenderer{}
+	i.Add(items...)
+	return i
 }
 
 func (l *OutRenderer) Len() int {

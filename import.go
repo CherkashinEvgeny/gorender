@@ -8,9 +8,9 @@ type ImportsRenderer struct {
 }
 
 func Imports(items ...Code) *ImportsRenderer {
-	l := &ImportsRenderer{}
-	l.Add(items...)
-	return l
+	i := &ImportsRenderer{}
+	i.Add(items...)
+	return i
 }
 
 func (l *ImportsRenderer) Len() int {
