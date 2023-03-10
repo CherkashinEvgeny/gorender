@@ -4,10 +4,11 @@ type MethodRenderer struct {
 	receiver  Code
 	name      string
 	signature Code
+	body      Code
 	ctx       Code
 }
 
-func Method(receiver Code, name string, signature Code) *MethodRenderer {
+func Method(receiver Code, name string, signature Code, body Code) *MethodRenderer {
 	m := &MethodRenderer{}
 	m.SetReceiver(receiver)
 	m.SetName(name)
@@ -45,6 +46,17 @@ func (m *MethodRenderer) SetSignature(signature Code) {
 	}
 }
 
+func (m *MethodRenderer) GetBody() Code {
+	return m.signature
+}
+
+func (m *MethodRenderer) SetBody(body Code) {
+	m.body = body
+	if body != nil {
+		body.setContext(m)
+	}
+}
+
 func (m *MethodRenderer) getContext() Code {
 	return m.ctx
 }
@@ -59,4 +71,11 @@ func (m *MethodRenderer) render(w *Writer) {
 	w.Write(" ")
 	w.Write(m.name)
 	m.signature.render(w)
+	w.Write(" {")
+	w.Br()
+	w.AddIndent()
+	m.body.render(w)
+	w.RemoveIndent()
+	w.Br()
+	w.Write("}")
 }

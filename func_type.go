@@ -5,9 +5,9 @@ type FuncTypeRenderer struct {
 	ctx       Code
 }
 
-func FuncType(in Code, out Code) *FuncTypeRenderer {
+func FuncType(sign Code) *FuncTypeRenderer {
 	f := &FuncTypeRenderer{}
-	f.SetSignature(Sign(in, out))
+	f.SetSignature(sign)
 	return f
 }
 

@@ -3,8 +3,9 @@ package renderer
 type ChanDir int
 
 const (
-	Receive ChanDir = 1
-	Send    ChanDir = 2
+	SendAndReceive ChanDir = 0
+	Receive        ChanDir = 1
+	Send           ChanDir = 2
 )
 
 type ChanRenderer struct {

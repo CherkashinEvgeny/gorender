@@ -1,24 +1,22 @@
 package renderer
 
 type StructRenderer struct {
-	body Code
-	ctx  Code
+	fields Code
+	ctx    Code
 }
 
-func Struct(fields ...Code) *StructRenderer {
+func Struct(fields Code) *StructRenderer {
 	s := &StructRenderer{}
-	if len(fields) != 0 {
-		s.SetFields(Fields(fields...))
-	}
+	s.SetFields(fields)
 	return s
 }
 
 func (s *StructRenderer) GetFields() Code {
-	return s.body
+	return s.fields
 }
 
 func (s *StructRenderer) SetFields(fields Code) {
-	s.body = fields
+	s.fields = fields
 	if fields != nil {
 		fields.setContext(s)
 	}
@@ -36,7 +34,7 @@ func (s *StructRenderer) render(w *Writer) {
 	w.Write("struct {")
 	w.Br()
 	w.AddIndent()
-	s.body.render(w)
+	s.fields.render(w)
 	w.RemoveIndent()
 	w.Br()
 	w.Write("}")
