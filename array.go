@@ -2,47 +2,47 @@ package renderer
 
 import "strconv"
 
-type Array struct {
+type ArrayRenderer struct {
 	size int
 	elem Code
 	ctx  Code
 }
 
-func NewArray(size int, elem Code) *Array {
-	a := &Array{}
+func Array(size int, elem Code) *ArrayRenderer {
+	a := &ArrayRenderer{}
 	a.SetSize(size)
 	a.SetElem(elem)
 	return a
 }
 
-func (a *Array) GetSize() int {
+func (a *ArrayRenderer) GetSize() int {
 	return a.size
 }
 
-func (a *Array) SetSize(size int) {
+func (a *ArrayRenderer) SetSize(size int) {
 	a.size = size
 }
 
-func (a *Array) GetElem() Code {
+func (a *ArrayRenderer) GetElem() Code {
 	return a.elem
 }
 
-func (a *Array) SetElem(elem Code) {
+func (a *ArrayRenderer) SetElem(elem Code) {
 	a.elem = elem
 	if elem != nil {
 		elem.setContext(a)
 	}
 }
 
-func (a *Array) getContext() Code {
+func (a *ArrayRenderer) getContext() Code {
 	return a.ctx
 }
 
-func (a *Array) setContext(ctx Code) {
+func (a *ArrayRenderer) setContext(ctx Code) {
 	a.ctx = ctx
 }
 
-func (a *Array) render(w *Writer) {
+func (a *ArrayRenderer) render(w *Writer) {
 	w.Write("[]")
 	w.Write(strconv.Itoa(a.size))
 	a.elem.render(w)

@@ -1,35 +1,35 @@
 package renderer
 
-type Named struct {
+type NamedRenderer struct {
 	path string
 	name string
 	ctx  Code
 }
 
-func NewNamed(path string, name string) *Named {
-	n := &Named{}
+func Named(path string, name string) *NamedRenderer {
+	n := &NamedRenderer{}
 	n.SetPath(path)
 	n.SetName(name)
 	return n
 }
 
-func (n *Named) SetPath(path string) {
+func (n *NamedRenderer) SetPath(path string) {
 	n.path = path
 }
 
-func (n *Named) SetName(name string) {
+func (n *NamedRenderer) SetName(name string) {
 	n.name = name
 }
 
-func (n *Named) getContext() Code {
+func (n *NamedRenderer) getContext() Code {
 	return n.ctx
 }
 
-func (n *Named) setContext(ctx Code) {
+func (n *NamedRenderer) setContext(ctx Code) {
 	n.ctx = ctx
 }
 
-func (n *Named) render(w *Writer) {
+func (n *NamedRenderer) render(w *Writer) {
 	w.Write(n.path)
 	w.Write(".")
 	w.Write(n.name)

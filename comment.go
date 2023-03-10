@@ -2,16 +2,20 @@ package renderer
 
 import "strings"
 
-type Comment string
+type CommentRenderer string
 
-func (c Comment) getContext() Code {
+func Comment(str string) CommentRenderer {
+	return CommentRenderer(str)
+}
+
+func (c CommentRenderer) getContext() Code {
 	return nil
 }
 
-func (c Comment) setContext(_ Code) {
+func (c CommentRenderer) setContext(_ Code) {
 }
 
-func (c Comment) render(w *Writer) {
+func (c CommentRenderer) render(w *Writer) {
 	lines := strings.Split(string(c), "\n")
 	for i, line := range lines {
 		if i != 0 {

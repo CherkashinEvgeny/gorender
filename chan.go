@@ -7,47 +7,47 @@ const (
 	Send    ChanDir = 2
 )
 
-type Chan struct {
+type ChanRenderer struct {
 	dir  ChanDir
 	elem Code
 	ctx  Code
 }
 
-func NewChan(dir ChanDir, elem Code) *Chan {
-	c := &Chan{}
+func Chan(dir ChanDir, elem Code) *ChanRenderer {
+	c := &ChanRenderer{}
 	c.SetDir(dir)
 	c.SetElem(elem)
 	return c
 }
 
-func (c *Chan) GetDir() ChanDir {
+func (c *ChanRenderer) GetDir() ChanDir {
 	return c.dir
 }
 
-func (c *Chan) SetDir(dir ChanDir) {
+func (c *ChanRenderer) SetDir(dir ChanDir) {
 	c.dir = dir
 }
 
-func (c *Chan) GetElem() Code {
+func (c *ChanRenderer) GetElem() Code {
 	return c.elem
 }
 
-func (c *Chan) SetElem(elem Code) {
+func (c *ChanRenderer) SetElem(elem Code) {
 	c.elem = elem
 	if elem != nil {
 		elem.setContext(c)
 	}
 }
 
-func (c *Chan) getContext() Code {
+func (c *ChanRenderer) getContext() Code {
 	return c.ctx
 }
 
-func (c *Chan) setContext(ctx Code) {
+func (c *ChanRenderer) setContext(ctx Code) {
 	c.ctx = ctx
 }
 
-func (c *Chan) render(w *Writer) {
+func (c *ChanRenderer) render(w *Writer) {
 	switch c.dir {
 	case Receive:
 		w.Write("<-chan ")

@@ -2,41 +2,41 @@ package renderer
 
 import "strings"
 
-type ImportList struct {
+type ImportsRenderer struct {
 	items []Code
 	ctx   Code
 }
 
-func NewImportList(items ...Code) *ImportList {
-	l := &ImportList{}
+func Imports(items ...Code) *ImportsRenderer {
+	l := &ImportsRenderer{}
 	l.Add(items...)
 	return l
 }
 
-func (l *ImportList) Len() int {
+func (l *ImportsRenderer) Len() int {
 	return len(l.items)
 }
 
-func (l *ImportList) Get(i int) Code {
+func (l *ImportsRenderer) At(i int) Code {
 	return l.items[i]
 }
 
-func (l *ImportList) Add(items ...Code) {
+func (l *ImportsRenderer) Add(items ...Code) {
 	l.items = append(l.items, items...)
 	for _, item := range items {
 		item.setContext(l)
 	}
 }
 
-func (l *ImportList) getContext() Code {
+func (l *ImportsRenderer) getContext() Code {
 	return l.ctx
 }
 
-func (l *ImportList) setContext(ctx Code) {
+func (l *ImportsRenderer) setContext(ctx Code) {
 	l.ctx = ctx
 }
 
-func (l *ImportList) render(w *Writer) {
+func (l *ImportsRenderer) render(w *Writer) {
 	w.Write("import (")
 	w.Br()
 	w.AddIndent()
@@ -51,28 +51,21 @@ func (l *ImportList) render(w *Writer) {
 	w.Write(")")
 }
 
-type Import struct {
+type ImportRenderer struct {
 	alias string
 	name  string
 	path  string
 }
 
-func NewImport(alias string, path string) *Import {
-	i := &Import{}
+func Import(name string, alias string, path string) *ImportRenderer {
+	i := &ImportRenderer{}
+	i.SetName(name)
 	i.SetAlias(alias)
 	i.SetPath(path)
 	return i
 }
 
-func (i *Import) GetAlias() string {
-	return i.alias
-}
-
-func (i *Import) SetAlias(alias string) {
-	i.alias = alias
-}
-
-func (i *Import) GetName() string {
+func (i *ImportRenderer) GetName() string {
 	if i.name == "" {
 		chunks := strings.Split(i.path, "/")
 		return chunks[len(chunks)-1]
@@ -80,26 +73,34 @@ func (i *Import) GetName() string {
 	return i.name
 }
 
-func (i *Import) SetName(alias string) {
+func (i *ImportRenderer) SetName(name string) {
+	i.name = name
+}
+
+func (i *ImportRenderer) GetAlias() string {
+	return i.alias
+}
+
+func (i *ImportRenderer) SetAlias(alias string) {
 	i.alias = alias
 }
 
-func (i *Import) GetPath() string {
+func (i *ImportRenderer) GetPath() string {
 	return i.path
 }
 
-func (i *Import) SetPath(path string) {
+func (i *ImportRenderer) SetPath(path string) {
 	i.path = path
 }
 
-func (i *Import) getContext() Code {
+func (i *ImportRenderer) getContext() Code {
 	return nil
 }
 
-func (i *Import) setContext(_ Code) {
+func (i *ImportRenderer) setContext(_ Code) {
 }
 
-func (i *Import) render(w *Writer) {
+func (i *ImportRenderer) render(w *Writer) {
 	if i.alias != "" {
 		w.Write(i.alias)
 		w.Write(" ")

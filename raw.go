@@ -1,14 +1,18 @@
 package renderer
 
-type Raw string
+type RawRenderer string
 
-func (c Raw) getContext() Code {
+func Raw(code string) RawRenderer {
+	return RawRenderer(code)
+}
+
+func (c RawRenderer) getContext() Code {
 	return nil
 }
 
-func (c Raw) setContext(_ Code) {
+func (c RawRenderer) setContext(_ Code) {
 }
 
-func (c Raw) render(w *Writer) {
+func (c RawRenderer) render(w *Writer) {
 	w.Write(string(c))
 }

@@ -1,38 +1,38 @@
 package renderer
 
 const (
-	Bool       = basic("bool")
-	Int        = basic("int")
-	Int8       = basic("int8")
-	Int16      = basic("int16")
-	Int32      = basic("int32")
-	Int64      = basic("int64")
-	Uint       = basic("uint")
-	Uint8      = basic("uint8")
-	Uint16     = basic("uint16")
-	Uint32     = basic("uint32")
-	Uint64     = basic("uint64")
-	Uintptr    = basic("uintptr")
-	Float32    = basic("float32")
-	Float64    = basic("float64")
-	Complex64  = basic("complex64")
-	Complex128 = basic("complex128")
-	String     = basic("string")
-	Byte       = basic("byte")
-	Rune       = basic("rune")
-	Any        = basic("any")
-	Error      = basic("error")
+	Bool       = basicRenderer("bool")
+	Int        = basicRenderer("int")
+	Int8       = basicRenderer("int8")
+	Int16      = basicRenderer("int16")
+	Int32      = basicRenderer("int32")
+	Int64      = basicRenderer("int64")
+	Uint       = basicRenderer("uint")
+	Uint8      = basicRenderer("uint8")
+	Uint16     = basicRenderer("uint16")
+	Uint32     = basicRenderer("uint32")
+	Uint64     = basicRenderer("uint64")
+	Uintptr    = basicRenderer("uintptr")
+	Float32    = basicRenderer("float32")
+	Float64    = basicRenderer("float64")
+	Complex64  = basicRenderer("complex64")
+	Complex128 = basicRenderer("complex128")
+	String     = basicRenderer("string")
+	Byte       = basicRenderer("byte")
+	Rune       = basicRenderer("rune")
+	Any        = basicRenderer("any")
+	Error      = basicRenderer("error")
 )
 
-type basic string
+type basicRenderer string
 
-func (t basic) getContext() Code {
+func (t basicRenderer) getContext() Code {
 	return nil
 }
 
-func (t basic) setContext(_ Code) {
+func (t basicRenderer) setContext(_ Code) {
 }
 
-func (t basic) render(w *Writer) {
+func (t basicRenderer) render(w *Writer) {
 	w.Write(string(t))
 }
