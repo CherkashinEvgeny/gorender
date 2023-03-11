@@ -139,7 +139,8 @@ func (l *OutRenderer) setContext(ctx Code) {
 }
 
 func (l *OutRenderer) render(w *Writer) {
-	if l.Len() > 1 {
+	brackets := l.needBrackets()
+	if brackets {
 		w.Write("(")
 	}
 	for i, param := range l.items {
@@ -148,7 +149,20 @@ func (l *OutRenderer) render(w *Writer) {
 		}
 		param.render(w)
 	}
-	if l.Len() > 1 {
+	if brackets {
 		w.Write(")")
 	}
+}
+
+func (l *OutRenderer) needBrackets() bool {
+	if len(l.items) == 0 {
+		return false
+	}
+	for _, item := range l.items {
+		param, ok := item.(*ParamRenderer)
+		if ok && param.name != "" {
+			return true
+		}
+	}
+	return false
 }

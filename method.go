@@ -13,6 +13,7 @@ func Method(receiver Code, name string, signature Code, body Code) *MethodRender
 	m.SetReceiver(receiver)
 	m.SetName(name)
 	m.SetSignature(signature)
+	m.SetBody(body)
 	return m
 }
 
@@ -67,7 +68,9 @@ func (m *MethodRenderer) setContext(ctx Code) {
 
 func (m *MethodRenderer) render(w *Writer) {
 	w.Write("func ")
+	w.Write("(")
 	m.receiver.render(w)
+	w.Write(")")
 	w.Write(" ")
 	w.Write(m.name)
 	m.signature.render(w)

@@ -117,9 +117,15 @@ func Pointer(t *types.Pointer) (code renderer.Code) {
 }
 
 func Named(t *types.Named) (code renderer.Code) {
+	var path string
+	var name string
 	obj := t.Obj()
 	pkg := obj.Pkg()
-	return renderer.Named(pkg.Path(), obj.Name())
+	if pkg != nil {
+		path = pkg.Path()
+	}
+	name = obj.Name()
+	return renderer.Named(path, name)
 }
 
 func Basic(t *types.Basic) (code renderer.Code) {

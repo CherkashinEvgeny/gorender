@@ -39,40 +39,9 @@ func (n *NamedRenderer) render(w *Writer) {
 }
 
 func (n *NamedRenderer) resolvePrefix() string {
-	imporrtsCode := n.getContext()
-	for {
-		if imporrtsCode == nil {
-			break
-		}
-		_, ok := imporrtsCode.(*PkgRenderer)
-		if ok {
-			break
-		}
-		imporrtsCode = imporrtsCode.getContext()
-	}
-	if imporrtsCode == nil {
-		return n.path
-	}
-	pkg, ok := imporrtsCode.(*PkgRenderer)
-	if !ok {
-		return n.path
-	}
-	imporrtsCode = pkg.GetImports()
-	if imporrtsCode == nil {
-		return n.path
-	}
-	imports, ok := pkg.GetImports().(*ImportsRenderer)
-	if !ok {
-		return n.path
-	}
-	var im *ImportRenderer
-	c := imports.Len()
-	for i := 0; i < c; i++ {
-		importCode := imports.At(i)
-		im, ok = importCode.(*ImportRenderer)
-		if ok {
-			break
-		}
+	im := n.findImport()
+	if im == nil {
+		return ""
 	}
 	alias := im.GetAlias()
 	if alias == "." || alias == "_" {
@@ -82,4 +51,45 @@ func (n *NamedRenderer) resolvePrefix() string {
 		return alias
 	}
 	return im.GetName()
+}
+
+func (n *NamedRenderer) findImport() *ImportRenderer {
+	imports := n.findImports()
+	if imports == nil {
+		return nil
+	}
+	c := imports.Len()
+	for i := 0; i < c; i++ {
+		importCandidate := imports.At(i)
+		im, ok := importCandidate.(*ImportRenderer)
+		if ok && n.path == im.GetPath() {
+			return im
+		}
+	}
+	return nil
+}
+
+func (n *NamedRenderer) findImports() *ImportsRenderer {
+	pkg := n.findPackage()
+	if pkg == nil {
+		return nil
+	}
+	importsCandidate := pkg.GetImports()
+	imports, ok := importsCandidate.(*ImportsRenderer)
+	if !ok {
+		return nil
+	}
+	return imports
+}
+
+func (n *NamedRenderer) findPackage() *PkgRenderer {
+	ctx := n.getContext()
+	for ctx != nil {
+		pkg, ok := ctx.(*PkgRenderer)
+		if ok {
+			return pkg
+		}
+		ctx = ctx.getContext()
+	}
+	return nil
 }

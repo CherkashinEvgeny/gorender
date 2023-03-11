@@ -197,7 +197,9 @@ func NamedImports(t *types.Named) []renderer.Code {
 func addNamedPackages(t *types.Named, imports map[*types.Package]struct{}) {
 	obj := t.Obj()
 	pkg := obj.Pkg()
-	imports[pkg] = struct{}{}
+	if pkg != nil {
+		imports[pkg] = struct{}{}
+	}
 }
 
 func addBasicPackages(_ *types.Basic, _ map[*types.Package]struct{}) {

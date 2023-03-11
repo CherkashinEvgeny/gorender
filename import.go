@@ -96,6 +96,14 @@ func (l *ImportsRenderer) setContext(ctx Code) {
 }
 
 func (l *ImportsRenderer) render(w *Writer) {
+	if len(l.items) == 0 {
+		return
+	}
+	if len(l.items) == 1 {
+		w.Write("import ")
+		l.items[0].render(w)
+		return
+	}
 	w.Write("import (")
 	w.Br()
 	w.AddIndent()

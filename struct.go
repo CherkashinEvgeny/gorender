@@ -32,11 +32,13 @@ func (s *StructRenderer) setContext(ctx Code) {
 
 func (s *StructRenderer) render(w *Writer) {
 	w.Write("struct {")
-	w.Br()
-	w.AddIndent()
-	s.fields.render(w)
-	w.RemoveIndent()
-	w.Br()
+	if s.fields != nil {
+		w.Br()
+		w.AddIndent()
+		s.fields.render(w)
+		w.RemoveIndent()
+		w.Br()
+	}
 	w.Write("}")
 }
 
