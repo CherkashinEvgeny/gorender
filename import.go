@@ -1,16 +1,31 @@
 package renderer
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 type ImportsRenderer struct {
-	items []Code
-	ctx   Code
+	items   []Code
+	pathMap map[string]struct{}
+	nameMap map[string]struct{}
+	ctx     Code
 }
 
 func Imports(items ...Code) *ImportsRenderer {
 	i := &ImportsRenderer{}
+	i.init()
 	i.Add(items...)
 	return i
+}
+
+func (l *ImportsRenderer) init() {
+	if l.pathMap == nil {
+		l.pathMap = map[string]struct{}{}
+	}
+	if l.nameMap == nil {
+		l.nameMap = map[string]struct{}{}
+	}
 }
 
 func (l *ImportsRenderer) Len() int {
@@ -22,10 +37,54 @@ func (l *ImportsRenderer) At(i int) Code {
 }
 
 func (l *ImportsRenderer) Add(items ...Code) {
-	l.items = append(l.items, items...)
+	l.init()
 	for _, item := range items {
-		item.setContext(l)
+		l.add(item)
 	}
+}
+
+func (l *ImportsRenderer) add(item Code) {
+	im, ok := item.(*ImportRenderer)
+	if !ok {
+		l.items = append(l.items, item)
+		item.setContext(l)
+		return
+	}
+	_, found := l.pathMap[im.GetPath()]
+	if found {
+		return
+	}
+	l.pathMap[im.GetPath()] = struct{}{}
+	if im.GetAlias() == "." || im.GetAlias() == "_" {
+		l.items = append(l.items, item)
+		item.setContext(l)
+		return
+	}
+	var name string
+	if im.GetName() != "" {
+		name = im.GetName()
+	}
+	if im.GetAlias() != "" {
+		name = im.GetAlias()
+	}
+	if name == "" {
+		l.items = append(l.items, item)
+		item.setContext(l)
+		return
+	}
+	alias := name
+	counter := 1
+	_, found = l.nameMap[alias]
+	for found {
+		counter++
+		alias = name + strconv.Itoa(counter)
+	}
+	l.nameMap[alias] = struct{}{}
+	if name != alias {
+		im.SetAlias(alias)
+	}
+	l.items = append(l.items, item)
+	item.setContext(l)
 }
 
 func (l *ImportsRenderer) getContext() Code {
